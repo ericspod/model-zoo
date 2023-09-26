@@ -1,0 +1,82 @@
+imports:
+- $import datetime
+- $import numpy
+- $import torch
+- $import ignite
+- $import scripts
+- $import os
+bundle_root: .
+ckpt_path: $@bundle_root + '/models/model.pt'
+device: $torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+val_interval: 1
+num_iters: 400
+batch_size: 100
+num_epochs: 100
+num_substeps: 3
+learning_rate: 0.0001
+num_workers: 8
+dataset_dir: .
+dataset_file: $@dataset_dir + '/valvelandmarks.npz'
+output_dir: $datetime.datetime.now().strftime('./results/output_%y%m%d_%H%M%S')
+network_def:
+  _target_: scripts.valve_landmarks.PointRegressor
+  in_shape: [1, 256, 256]
+  out_shape: [2, 10]
+  channels: [8, 16, 32, 64, 128]
+  strides: [2, 2, 2, 2, 2]
+network: $@network_def.to(@device)
+im_shape: [1, 256, 256]
+both_keys: [image, label]
+
+eval_transforms:
+  _target_: Compose
+  transforms:
+  - _target_: EnsureTyped
+    keys: '@both_keys'
+    data_type: numpy
+    dtype: $(numpy.float32, numpy.int32)
+  - _target_: EnsureTyped
+    keys: '@both_keys'
+  - _target_: ScaleIntensityd
+    keys: image
+  - _target_: EnsureChannelFirstd
+    keys: '@both_keys'
+    channel_dim: no_channel
+  - _target_: Lambdad
+    keys: label
+    func: $scripts.valve_landmarks.convert_lm_image_t
+    
+eval_dataset:
+  _target_: NPZDictItemDataset
+  npzfile: $@dataset_file
+  keys:
+    testImgs: image
+    testLMImgs: label
+  transform: '@eval_transforms'
+
+eval_dataloader:
+  _target_: DataLoader
+  dataset: '@eval_dataset'
+  batch_size: '@batch_size'
+  num_workers: '@num_workers'
+
+evaluator:
+  _target_: SupervisedEvaluator
+  device: '@device'
+  val_data_loader: '@eval_dataloader'
+  network: '@network'
+  key_val_metric:
+    val_mean_dist:
+      _target_: ignite.metrics.MeanPairwiseDistance
+      output_transform: $scripts.valve_landmarks._output_lm_trans
+  metric_cmp_fn: '$lambda current, prev: prev < 0 or current < prev'
+  val_handlers:
+  - _target_: CheckpointLoader
+    load_path: '@ckpt_path'
+    load_dict:
+      net: '@network'
+  - _target_: StatsHandler
+    output_transform: '$lambda x: None'
+
+testing:
+- $@evaluator.run()
