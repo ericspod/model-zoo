@@ -1,13 +1,13 @@
 # Copyright (c) 2022 Eric Kerfoot under MIT license, see license.txt
 
 import os
-from typing import Any, Callable, Sequence
+from collections.abc import Callable, Sequence
+from typing import Any
 
 import monai
 import monai.transforms as mt
 import numpy as np
 import torch
-import torch.nn as nn
 from monai.data.meta_obj import get_track_meta
 from monai.networks.blocks import ConvDenseBlock, Convolution
 from monai.networks.layers import Flatten, Reshape
@@ -16,6 +16,7 @@ from monai.networks.utils import meshgrid_ij
 from monai.utils import CommonKeys
 from monai.utils import ImageMetaKey as Key
 from monai.utils import convert_to_numpy, convert_to_tensor
+from torch import nn
 
 # relates the label in training images to index of landmark point
 LM_INDICES = {

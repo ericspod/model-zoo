@@ -96,8 +96,7 @@ def get_requirements(bundle, models_path, requirements_file):
 
         if len(libs) > 0:
             with open(requirements_file, "w") as f:
-                for line in libs:
-                    f.write(f"{line}\n")
+                f.writelines(f"{line}\n" for line in libs)
 
 
 def get_install_script(bundle):

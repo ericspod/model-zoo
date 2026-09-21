@@ -13,8 +13,9 @@ import math
 import os
 import zipfile
 from argparse import Namespace
+from collections.abc import Sequence
 from datetime import timedelta
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 import skimage
@@ -47,8 +48,6 @@ def unzip_dataset(dataset_dir):
 
     if dist.is_available() and dist.is_initialized():
         dist.barrier()  # Synchronize all processes
-
-    return
 
 
 def add_data_dir2path(list_files: list, data_dir: str, fold: int = None) -> tuple[list, list]:
@@ -440,7 +439,7 @@ def general_mask_generation_post_process(volume_t, target_tumor_label=None, devi
 
     # ------------ refine body mask pred
     body_region_mask = (
-        erode_one_img(torch.from_numpy((volume_t > 0)).to(device), filter_size=3, pad_value=0.0).cpu().numpy()
+        erode_one_img(torch.from_numpy(volume_t > 0).to(device), filter_size=3, pad_value=0.0).cpu().numpy()
     )
     body_region_mask, _ = supress_non_largest_components(body_region_mask, [1])
     body_region_mask = (
@@ -494,7 +493,7 @@ def general_mask_generation_post_process(volume_t, target_tumor_label=None, devi
     if target_tumor_label == 23 and np.sum(target_tumor) > 0:
         # speical process for cases with lung tumor
         dia_lung_tumor_mask = (
-            dilate_one_img(torch.from_numpy((data == 23)).to(device), filter_size=3, pad_value=0.0).cpu().numpy()
+            dilate_one_img(torch.from_numpy(data == 23).to(device), filter_size=3, pad_value=0.0).cpu().numpy()
         )
         tmp = (
             (data * (dia_lung_tumor_mask.astype(np.uint8) - (data == 23).astype(np.uint8))).astype(np.float32).flatten()
@@ -533,7 +532,7 @@ def general_mask_generation_post_process(volume_t, target_tumor_label=None, devi
         data[organ_fill_by_removed_mask(data, target_label=3, remove_mask=organ_remove_mask, device=device)] = 3
         data[organ_fill_by_removed_mask(data, target_label=3, remove_mask=organ_remove_mask, device=device)] = 3
         dia_tumor_mask = (
-            dilate_one_img(torch.from_numpy((data == target_tumor_label)).to(device), filter_size=3, pad_value=0.0)
+            dilate_one_img(torch.from_numpy(data == target_tumor_label).to(device), filter_size=3, pad_value=0.0)
             .cpu()
             .numpy()
         )
@@ -564,7 +563,7 @@ def general_mask_generation_post_process(volume_t, target_tumor_label=None, devi
     if target_tumor_label == 27 and np.sum(target_tumor) > 0:
         # speical process for cases with colon tumor
         dia_tumor_mask = (
-            dilate_one_img(torch.from_numpy((data == target_tumor_label)).to(device), filter_size=3, pad_value=0.0)
+            dilate_one_img(torch.from_numpy(data == target_tumor_label).to(device), filter_size=3, pad_value=0.0)
             .cpu()
             .numpy()
         )

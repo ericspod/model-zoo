@@ -11,7 +11,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
+from collections.abc import Callable, Iterable, Sequence
+from typing import TYPE_CHECKING, Any
 
 import torch
 from monai.apps.detection.networks.retinanet_detector import RetinaNetDetector
@@ -36,11 +37,11 @@ __all__ = ["DetectionEvaluator"]
 
 
 def detection_prepare_val_batch(
-    batchdata: List[Dict[str, torch.Tensor]],
-    device: Optional[Union[str, torch.device]] = None,
+    batchdata: list[dict[str, torch.Tensor]],
+    device: str | torch.device | None = None,
     non_blocking: bool = False,
     **kwargs,
-) -> Union[Tuple[torch.Tensor, Optional[torch.Tensor]], torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor | None] | torch.Tensor:
     """
     Default function to prepare the data for current iteration.
     Args `batchdata`, `device`, `non_blocking` refer to the ignite API:

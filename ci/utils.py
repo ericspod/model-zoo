@@ -15,7 +15,6 @@ import json
 import os
 import re
 import shutil
-from typing import List
 
 from monai.apps.utils import download_url
 from monai.bundle.config_parser import ConfigParser
@@ -69,7 +68,7 @@ def get_hash_func(hash_type: str = "sha1"):
     return actual_hash_func()
 
 
-def get_changed_bundle_list(changed_dirs: List[str], root_path: str = "models", filter_docs: bool = False):
+def get_changed_bundle_list(changed_dirs: list[str], root_path: str = "models", filter_docs: bool = False):
     """
     This function is used to return all bundle names that have changed files.
     If a bundle is totally removed, it will be ignored (since it not exists).
@@ -95,7 +94,7 @@ def get_changed_bundle_list(changed_dirs: List[str], root_path: str = "models", 
     return list(set(changed_bundle_list))
 
 
-def prepare_schema(bundle_list: List[str], root_path: str = "models", hf_model: bool = False):
+def prepare_schema(bundle_list: list[str], root_path: str = "models", hf_model: bool = False):
     """
     This function is used to prepare schema for changed bundles.
     Due to Github's limitation (see: https://github.com/Project-MONAI/model-zoo/issues/111),
@@ -115,7 +114,7 @@ def prepare_schema(bundle_list: List[str], root_path: str = "models", hf_model: 
             schema_url = metadata["schema"]
             schema_name = schema_url.split("/")[-1]
 
-            if schema_url not in schema_dict.keys():
+            if schema_url not in schema_dict:
                 schema_path = os.path.join(root_path, schema_name)
                 download_url(url=schema_url, filepath=schema_path)
                 schema_dict[schema_url] = schema_path
