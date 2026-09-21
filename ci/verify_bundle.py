@@ -241,8 +241,7 @@ def get_app_properties(app: str, version: str):
         if "bundle_properties.py" in files and os.path.isfile(os.path.join(root, "bundle_properties.py")):
             print(root)
             return os.path.join(root, "bundle_properties.py")
-    else:
-        return None
+    return None
 
 
 def check_properties(**kwargs):

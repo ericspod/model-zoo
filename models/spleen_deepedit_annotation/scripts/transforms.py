@@ -1,5 +1,3 @@
-from typing import Dict
-
 import numpy as np
 from einops import rearrange
 from monai.transforms.transform import Transform
@@ -25,7 +23,7 @@ class OrientationGuidanceMultipleLabelDeepEditd(Transform):
         return point
 
     def __call__(self, data):
-        d: Dict = dict(data)
+        d: dict = dict(data)
         for key_label in self.label_names.keys():
             points = d.get(key_label, [])
             if len(points) < 1:

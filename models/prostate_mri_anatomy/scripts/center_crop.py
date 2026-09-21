@@ -13,7 +13,7 @@
 import argparse
 from typing import Union
 
-import SimpleITK as sitk  # noqa N813
+import SimpleITK as sitk
 
 parser = argparse.ArgumentParser(description="Center crop a 3d volume")
 parser.add_argument("--file_name", type=str, required=True, help="Path to the input file to center crop.")
@@ -35,7 +35,7 @@ def _flatten(t):
     return [item for sublist in t for item in sublist]
 
 
-def crop(image: sitk.Image, margin: Union[int, float], interpolator=sitk.sitkLinear):
+def crop(image: sitk.Image, margin: float, interpolator=sitk.sitkLinear):
     """
     Crops a sitk.Image while retaining correct spacing. Negative margins will lead to zero padding
 
