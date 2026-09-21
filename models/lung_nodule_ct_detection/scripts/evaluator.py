@@ -41,7 +41,7 @@ def detection_prepare_val_batch(
     device: str | torch.device | None = None,
     non_blocking: bool = False,
     **kwargs,
-) -> tuple[torch.Tensor, torch.Tensor | None] | torch.Tensor:
+) -> tuple[list[torch.Tensor], list[dict[str, torch.Tensor]] | None]:
     """
     Default function to prepare the data for current iteration.
     Args `batchdata`, `device`, `non_blocking` refer to the ignite API:
