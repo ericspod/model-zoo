@@ -32,7 +32,7 @@ def drop_block_2d(
     DropBlock with an experimental gaussian noise option. This layer has been tested on a few training
     runs with success, but needs further validation and possibly optimization for lower runtime impact.
     """
-    b, c, h, w = x.shape
+    _, c, h, w = x.shape
     total_size = w * h
     clipped_block_size = min(block_size, min(w, h))
     # seed_drop_rate, the gamma parameter
@@ -83,7 +83,7 @@ def drop_block_fast_2d(
     DropBlock with an experimental gaussian noise option. Simplied from above without concern for valid
     block mask at edges.
     """
-    b, c, h, w = x.shape
+    _, _, h, w = x.shape
     total_size = w * h
     clipped_block_size = min(block_size, min(w, h))
     gamma = gamma_scale * drop_prob * total_size / clipped_block_size**2 / ((w - block_size + 1) * (h - block_size + 1))

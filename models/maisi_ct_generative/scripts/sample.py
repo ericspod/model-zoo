@@ -460,9 +460,9 @@ def check_input(body_region, anatomy_list, label_dict_json, output_size, spacing
         with open(label_dict_json) as f:
             label_dict = json.load(f)
         for anatomy in anatomy_list:
-            if anatomy not in label_dict.keys():
+            if anatomy not in label_dict:
                 raise ValueError(
-                    f"The components in anatomy_list have to be chosen from {label_dict.keys()}, yet got {anatomy}."
+                    f"The components in anatomy_list have to be chosen from {label_dict}, yet got {anatomy}."
                 )
     logging.info(f"The generate results will have voxel size to be {spacing} mm, volume size to be {output_size}.")
 
@@ -520,7 +520,7 @@ class LDMSampler:
         if random_seed is not None:
             set_determinism(seed=random_seed)
 
-        with open(label_dict_json, "r") as f:
+        with open(label_dict_json) as f:
             label_dict = json.load(f)
         self.all_anatomy_size_condtions_json = all_anatomy_size_condtions_json
 
@@ -573,7 +573,7 @@ class LDMSampler:
 
         # quality check args
         self.max_try_time = 3  # if not pass quality check, will try self.max_try_time times
-        with open(real_img_median_statistics, "r") as json_file:
+        with open(real_img_median_statistics) as json_file:
             self.median_statistics = json.load(json_file)
         self.label_int_dict = {
             "liver": [1],
@@ -793,7 +793,7 @@ class LDMSampler:
             anatomy_name, anatomy_size = element
             provide_anatomy_size[anatomy_size_idx[anatomy_name]] = anatomy_size
 
-        with open(self.all_anatomy_size_condtions_json, "r") as f:
+        with open(self.all_anatomy_size_condtions_json) as f:
             all_anatomy_size_condtions = json.load(f)
 
         # loop through the database and find closest combinations

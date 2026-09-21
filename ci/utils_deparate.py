@@ -33,7 +33,7 @@ def get_sub_folders(root_dir: str):
 
 
 def get_json_dict(json_dict_path: str):
-    with open(json_dict_path, "r") as f:
+    with open(json_dict_path) as f:
         json_dict = json.load(f)
 
     return json_dict
@@ -111,7 +111,7 @@ def save_model_info(model_info_dict, model_info_path: str):
 def get_latest_version(bundle_name: str, model_info_path: str):
     model_info_dict = get_json_dict(model_info_path)
     versions = []
-    for k in model_info_dict.keys():
+    for k in model_info_dict:
         if bundle_name in k:
             versions.append(k.split(f"{bundle_name}_v")[1])
 

@@ -92,7 +92,7 @@ class OutputVis:
             self.predictor = DefaultPredictor(cfg)
             self._mode = "model"
         elif pred_mode == "file":
-            with open(pred_file, "r") as f:
+            with open(pred_file) as f:
                 self.pred_instances = json.load(f)
             self.instance_img_list = [p["image_id"] for p in self.pred_instances]
             self._mode = "file"
@@ -442,7 +442,7 @@ class OutputVis:
 
             outputs = self.get_outputs_from_file(imgid, (scan_height, scan_width))
             outputs = outputs[outputs.scores > self.prob_thresh]
-            instances = outputs.pred_boxes[:, (0, 2)].round().clip(0, scan_width - 1).to(np.int)
+            instances = outputs.pred_boxes[:, (0, 2)].round().clip(0, scan_width - 1).to(int)
 
             for inst in instances:
                 try:
@@ -857,7 +857,7 @@ class CreatePlotsRPD:
             CreatePlotsRPD: An instance of the class.
         """
         df = pd.DataFrame(
-            index=mycoco.cocoGt.imgs.keys(),
+            index=mycoco.cocoGt.imgs,
             columns=["gt_instances", "gt_pxs", "gt_xpxs", "dt_instances", "dt_pxs", "dt_xpxs"],
             dtype=np.uint64,
         )

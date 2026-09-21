@@ -34,7 +34,7 @@ from torch.nn.parallel import DistributedDataParallel
 from torch.utils.tensorboard import SummaryWriter
 
 
-def run(config_file: str | Sequence[str]):
+def run(config_file: str | Sequence[str]):  # ruff: ignore[C901]  FIXME: too complex
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
     parser = ConfigParser()
@@ -75,7 +75,7 @@ def run(config_file: str | Sequence[str]):
         world_size = 1
     print("[info] world_size:", world_size)
 
-    with open(data_list_file_path, "r") as f:
+    with open(data_list_file_path) as f:
         json_data = json.load(f)
 
     list_train = json_data["training"]

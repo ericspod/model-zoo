@@ -16,7 +16,7 @@ def detach_to_numpy(data: list | dict | torch.Tensor) -> list | dict | torch.Ten
         return [detach_to_numpy(d) for d in data]
 
     elif isinstance(data, dict):
-        for k in data.keys():
+        for k in data:
             data[k] = detach_to_numpy(data[k])
         return data
 

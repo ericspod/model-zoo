@@ -168,7 +168,7 @@ class DetectionEvaluator(SupervisedEvaluator):
             output_list = []
             for i in range(len(engine.state.output[Keys.IMAGE])):
                 output_list.append({})
-                for k in engine.state.output.keys():
+                for k in engine.state.output:
                     if engine.state.output[k] is not None:
                         output_list[i][k] = engine.state.output[k][i]
             engine.state.output = output_list

@@ -85,7 +85,7 @@ def add_data_dir2path(list_files: list, data_dir: str, fold: int = None) -> tupl
 
 
 def maisi_datafold_read(json_list, data_base_dir, fold=None):
-    with open(json_list, "r") as f:
+    with open(json_list) as f:
         filenames_train = json.load(f)["training"]
     # training data
     train_files, val_files = add_data_dir2path(filenames_train, data_base_dir, fold=fold)
@@ -107,7 +107,7 @@ def remap_labels(mask, label_dict_remap_json):
     Returns:
         Tensor: The remapped mask tensor.
     """
-    with open(label_dict_remap_json, "r") as f:
+    with open(label_dict_remap_json) as f:
         mapping_dict = json.load(f)
     mapper = MapLabelValue(
         orig_labels=[pair[0] for pair in mapping_dict.values()],
@@ -295,13 +295,13 @@ def prepare_maisi_controlnet_json_dataloader(
         list_train = []
         list_valid = []
         for data_list, data_root in zip(json_data_list, data_base_dir):
-            with open(data_list, "r") as f:
+            with open(data_list) as f:
                 json_data = json.load(f)["training"]
             train, val = add_data_dir2path(json_data, data_root, fold)
             list_train += train
             list_valid += val
     else:
-        with open(json_data_list, "r") as f:
+        with open(json_data_list) as f:
             json_data = json.load(f)["training"]
         list_train, list_valid = add_data_dir2path(json_data, data_base_dir, fold)
 

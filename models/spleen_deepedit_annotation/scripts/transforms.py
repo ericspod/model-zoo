@@ -24,7 +24,7 @@ class OrientationGuidanceMultipleLabelDeepEditd(Transform):
 
     def __call__(self, data):
         d: dict = dict(data)
-        for key_label in self.label_names.keys():
+        for key_label in self.label_names:
             points = d.get(key_label, [])
             if len(points) < 1:
                 continue

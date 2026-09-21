@@ -94,7 +94,7 @@ class Ensembler:
         self.results = []
 
         print(
-            f"Working with {self.n_detectors} models, {len(self.cats)} categories, and {len(self.coco_gt.imgs.keys())} images."
+            f"Working with {self.n_detectors} models, {len(self.cats)} categories, and {len(self.coco_gt.imgs)} images."
         )
 
     def mean_score_nms(self):
@@ -132,8 +132,8 @@ class Ensembler:
             return sets
 
         winning_list = []
-        print(f"Computing mean score non-max suppression ensembling for {len(self.coco_gt.imgs.keys())} images.")
-        for img in tqdm(self.coco_gt.imgs.keys()):
+        print(f"Computing mean score non-max suppression ensembling for {len(self.coco_gt.imgs)} images.")
+        for img in tqdm(self.coco_gt.imgs):
             # print(img)
             dflist = []  # a dataframe of detections
             obj_set = set()  # a set of objects (frozensets)

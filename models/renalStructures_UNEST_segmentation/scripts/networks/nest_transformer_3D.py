@@ -482,7 +482,7 @@ def resize_pos_embed(posemb, posemb_new):
 
 def checkpoint_filter_fn(state_dict, model):
     """resize positional embeddings of pretrained weights"""
-    pos_embed_keys = [k for k in state_dict.keys() if k.startswith("pos_embed_")]
+    pos_embed_keys = [k for k in state_dict if k.startswith("pos_embed_")]
     for k in pos_embed_keys:
         if state_dict[k].shape != getattr(model, k).shape:
             state_dict[k] = resize_pos_embed(state_dict[k], getattr(model, k))
