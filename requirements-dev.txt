@@ -8,8 +8,8 @@ mccabe
 pep8-naming
 pycodestyle
 pyflakes
-black<25
-isort<6.0.0
+black>=26.5.1
+isort>9.0.0
 pytype>=2020.6.1; platform_system != "Windows"
 types-setuptools
 mypy>=0.790
