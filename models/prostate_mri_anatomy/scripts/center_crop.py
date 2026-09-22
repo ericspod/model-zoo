@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser(description="Center crop a 3d volume")
 parser.add_argument("--file_name", type=str, required=True, help="Path to the input file to center crop.")
 parser.add_argument(
     "--margin",
-    type=int | float,
+    type=lambda v: (int(v) if v.isdecimal() else float(v)),
     required=False,
     default=0.2,
     help="Crop margins applied to EACH side in the axial plane. "

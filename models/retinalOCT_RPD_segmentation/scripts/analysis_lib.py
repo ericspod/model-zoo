@@ -442,7 +442,7 @@ class OutputVis:
 
             outputs = self.get_outputs_from_file(imgid, (scan_height, scan_width))
             outputs = outputs[outputs.scores > self.prob_thresh]
-            instances = outputs.pred_boxes[:, (0, 2)].round().clip(0, scan_width - 1).to(int)
+            instances = outputs.pred_boxes[:, (0, 2)].round().clip(0, scan_width - 1).to(dtype=torch.int64)
 
             for inst in instances:
                 try:
